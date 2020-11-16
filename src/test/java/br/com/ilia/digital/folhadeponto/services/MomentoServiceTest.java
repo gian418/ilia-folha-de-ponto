@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 
@@ -24,7 +23,7 @@ public class MomentoServiceTest {
     private MomentoService momentoService;
 
     @Test
-    public void deveRetornarBadRequestAoTentarInserirMaisQueQuatroRegistros() {
+    public void deveRetornarExceptionAoTentarInserirMaisQueQuatroRegistros() {
         Exception exception = assertThrows(MomentoBatidaException.class, () -> {
             Momento momento = new Momento();
             momento.setDataHora("2020-11-16T19:00:00");
@@ -38,7 +37,7 @@ public class MomentoServiceTest {
     }
 
     @Test
-    public void deveRetornarBadRequestAoTentarInserirBatidaNoSabado() {
+    public void deveRetornarExceptionAoTentarInserirBatidaNoSabado() {
         Exception exception = assertThrows(MomentoBatidaException.class, () -> {
             Momento momento = new Momento();
             momento.setDataHora("2020-11-14T08:00:00");
@@ -52,7 +51,7 @@ public class MomentoServiceTest {
     }
 
     @Test
-    public void deveRetornarBadRequestAoTentarInserirBatidaNoDomingo() {
+    public void deveRetornarExceptionAoTentarInserirBatidaNoDomingo() {
         Exception exception = assertThrows(MomentoBatidaException.class, () -> {
             Momento momento = new Momento();
             momento.setDataHora("2020-11-15T08:00:00");
@@ -66,7 +65,7 @@ public class MomentoServiceTest {
     }
 
     @Test
-    public void deveRetornarBadRequestAoTentarInserirIntervalorMenorQue60Minutos() {
+    public void deveRetornarExceptionAoTentarInserirIntervalorMenorQue60Minutos() {
         Exception exception = assertThrows(MomentoBatidaException.class, () -> {
             Momento momento = new Momento();
             momento.setDataHora("2020-11-17T12:59:00");
@@ -80,7 +79,7 @@ public class MomentoServiceTest {
     }
 
     @Test
-    public void deveRetornarBadRequestAoTentarInserirBatidaComHoraMenorQueUltima() {
+    public void deveRetornarExceptionAoTentarInserirBatidaComHoraMenorQueUltima() {
         Exception exception = assertThrows(MomentoBatidaException.class, () -> {
             Momento momento = new Momento();
             momento.setDataHora("2020-11-17T10:00:00");
