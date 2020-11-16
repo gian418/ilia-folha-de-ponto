@@ -5,7 +5,9 @@ import br.com.ilia.digital.folhadeponto.models.MomentoVO;
 import br.com.ilia.digital.folhadeponto.repository.MomentoRepository;
 import br.com.ilia.digital.folhadeponto.services.exceptions.MomentoBatidaException;
 import org.openapi.folhadeponto.server.model.Momento;
+import org.openapi.folhadeponto.server.model.Registro;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ReactiveHttpInputMessage;
 import org.springframework.stereotype.Service;
 
 import static java.time.DayOfWeek.SUNDAY;
@@ -20,6 +22,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MomentoService {
@@ -27,7 +30,7 @@ public class MomentoService {
     @Autowired
     private MomentoRepository repository;
 
-    public MomentoVO insert(Momento momento) {
+    public Registro validarSalvar(Momento momento) {
         LocalDateTime dataHoraMomentoAtual = this.converterParaLocalDateTime(momento.getDataHora());
         DayOfWeek diaDaSemana = dataHoraMomentoAtual.getDayOfWeek();
 
@@ -38,8 +41,9 @@ public class MomentoService {
         MomentoVO momentoVO = new MomentoVO();
         momentoVO.setDataHora(dataHoraMomentoAtual);
         momentoVO.setTipo(obterTipoMomento(momentoVO.getDataHora()));
+        repository.save(momentoVO);
 
-        return repository.save(momentoVO);
+        return construirRegistro(dataHoraMomentoAtual.toLocalDate());
     }
 
     public List<MomentoVO> findByData(LocalDate dataMomento) {
@@ -79,5 +83,19 @@ public class MomentoService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         LocalDateTime dateTime = LocalDateTime.parse(dataIso, formatter);
         return dateTime;
+    }
+
+    private Registro construirRegistro(LocalDate dataBatida) {
+        List<MomentoVO> momentos = repository.findAllByDate(dataBatida);
+
+        List<String> horasRegistro =  momentos.stream().map(MomentoVO::getDataHora).map(dataHora -> {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+            return dataHora.format(formatter);
+        }).collect(Collectors.toList());
+
+        Registro registro = new Registro();
+        registro.setDia(dataBatida);
+        registro.setHorarios(horasRegistro);
+        return registro;
     }
 }

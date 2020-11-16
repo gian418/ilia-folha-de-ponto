@@ -37,7 +37,7 @@ public class FolhaDePontoResource implements V1Api {
 
     @Override
     public ResponseEntity<Registro> insereBatida(@Valid Momento momento) {
-        momentoService.insert(momento);
-        return null;
+        Registro registro = momentoService.validarSalvar(momento);
+        return ResponseEntity.ok().body(registro);
     }
 }
