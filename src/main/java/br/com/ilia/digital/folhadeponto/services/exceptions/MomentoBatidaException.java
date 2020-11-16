@@ -6,8 +6,4 @@ public class MomentoBatidaException extends RuntimeException {
     public MomentoBatidaException(String message) {
         super(message);
     }
-
-    public MomentoBatidaException(String message, Throwable cause) {
-        super(message, cause);
-    }
 }

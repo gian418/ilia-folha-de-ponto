@@ -1,5 +1,6 @@
 package br.com.ilia.digital.folhadeponto.services;
 
+import br.com.ilia.digital.folhadeponto.enums.MensagensErro;
 import br.com.ilia.digital.folhadeponto.enums.TipoMomento;
 import br.com.ilia.digital.folhadeponto.models.MomentoVO;
 import br.com.ilia.digital.folhadeponto.repository.MomentoRepository;
@@ -14,6 +15,7 @@ import static java.time.DayOfWeek.SUNDAY;
 import static java.time.DayOfWeek.SATURDAY;
 import static br.com.ilia.digital.folhadeponto.enums.TipoMomento.ENTRADA;
 import static br.com.ilia.digital.folhadeponto.enums.TipoMomento.SAIDA;
+import static br.com.ilia.digital.folhadeponto.enums.MensagensErro.*;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -35,7 +37,7 @@ public class MomentoService {
         DayOfWeek diaDaSemana = dataHoraMomentoAtual.getDayOfWeek();
 
         if (diaDaSemana.equals(SATURDAY) || diaDaSemana.equals(SUNDAY)) {
-            throw new MomentoBatidaException("Momento invalido. Batida não pode ser registrada em um final de semana.");
+            throw new MomentoBatidaException(ERRO_MSG_MOMENTO_BATIDAS_EM_FINALDESEMANA.getMsg());
         }
 
         MomentoVO momentoVO = new MomentoVO();
@@ -46,14 +48,13 @@ public class MomentoService {
         return construirRegistro(dataHoraMomentoAtual.toLocalDate());
     }
 
-    public List<MomentoVO> findByData(LocalDate dataMomento) {
+    public List<MomentoVO> findAllByData(LocalDate dataMomento) {
         List<MomentoVO> momentos = repository.findAllByDate(dataMomento);
         return momentos;
     }
 
-
     private TipoMomento obterTipoMomento(LocalDateTime dataHoraMomentoAtual) {
-        List<MomentoVO> momentos = findByData(dataHoraMomentoAtual.toLocalDate());
+        List<MomentoVO> momentos = findAllByData(dataHoraMomentoAtual.toLocalDate());
         if(momentos.isEmpty()) return ENTRADA;
 
         MomentoVO ultimoMomento = momentos.stream().max(Comparator.comparing(MomentoVO::getDataHora)).get();
@@ -65,16 +66,16 @@ public class MomentoService {
     }
 
     private void validarMomento(List<MomentoVO> momentos, MomentoVO ultimoMomento, LocalDateTime dataHoraMomentoAtual) {
-        if(momentos.size() > 4)
-            throw new MomentoBatidaException("Momento inválido. Número máximo de 4 batidas atingido");
+        if(momentos.size() >= 4)
+            throw new MomentoBatidaException(ERRO_MSG_NUMERO_MAX_MOMENTOS_BATIDAS_ATINGINDO.getMsg());
 
         if(ultimoMomento.getDataHora().isAfter(dataHoraMomentoAtual))
-            throw new MomentoBatidaException("Momento inválido. A hora da batida deve superior a última.");
+            throw new MomentoBatidaException(ERRO_MSG_MOMENTO_BATIDA_HORA_MAIOR_QUE_ULTIMO_REGISTRO.getMsg());
 
         if(ultimoMomento.getTipo().equals(TipoMomento.SAIDA)) {
             long minutosDiferenca = ChronoUnit.MINUTES.between(ultimoMomento.getDataHora(), dataHoraMomentoAtual);
             if(minutosDiferenca < 60)
-               throw new MomentoBatidaException("Momento invalido. O intervalo deve ter no minimo 60 minutos.");
+               throw new MomentoBatidaException(ERRO_MSG_MOMENTO_BATIDA_INTERVALO_INVALIDO.getMsg());
 
         }
     }
