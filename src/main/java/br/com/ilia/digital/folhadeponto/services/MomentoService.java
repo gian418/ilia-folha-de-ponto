@@ -32,7 +32,7 @@ public class MomentoService {
     @Autowired
     private MomentoRepository repository;
 
-    public Registro validarSalvar(Momento momento) {
+    public Registro validarSalvar(Momento momento)  {
         LocalDateTime dataHoraMomentoAtual = this.converterParaLocalDateTime(momento.getDataHora());
         DayOfWeek diaDaSemana = dataHoraMomentoAtual.getDayOfWeek();
 
@@ -53,7 +53,7 @@ public class MomentoService {
         return momentos;
     }
 
-    private TipoMomento obterTipoMomento(LocalDateTime dataHoraMomentoAtual) {
+    private TipoMomento obterTipoMomento(LocalDateTime dataHoraMomentoAtual)  {
         List<MomentoVO> momentos = findAllByData(dataHoraMomentoAtual.toLocalDate());
         if(momentos.isEmpty()) return ENTRADA;
 

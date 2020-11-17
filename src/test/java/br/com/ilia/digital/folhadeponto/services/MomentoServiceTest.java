@@ -93,7 +93,7 @@ public class MomentoServiceTest {
     }
 
     @Test
-    public void deveInserirComoEntradaAPrimeiraBatidaDoDia() {
+    public void deveInserirComoEntradaAPrimeiraBatidaDoDia() throws MomentoBatidaException {
         Momento momento = new Momento();
         momento.setDataHora("2020-11-18T08:00:00");
         momentoService.validarSalvar(momento);
@@ -108,7 +108,7 @@ public class MomentoServiceTest {
     }
 
     @Test
-    public void deveInserirComoSaidaASegundaBatidaDoDia() {
+    public void deveInserirComoSaidaASegundaBatidaDoDia() throws MomentoBatidaException {
         Momento momento = new Momento();
         momento.setDataHora("2020-11-19T12:00:00");
         momentoService.validarSalvar(momento);
@@ -125,7 +125,7 @@ public class MomentoServiceTest {
     }
 
     @Test
-    public void deveInserirComoEntradaATerceiraBatidaDoDia() {
+    public void deveInserirComoEntradaATerceiraBatidaDoDia() throws MomentoBatidaException {
         Momento momento = new Momento();
         momento.setDataHora("2020-11-23T13:00:00");
         momentoService.validarSalvar(momento);
@@ -142,7 +142,7 @@ public class MomentoServiceTest {
     }
 
     @Test
-    public void deveInserirComoSaidaAQuartaBatidaDoDia() {
+    public void deveInserirComoSaidaAQuartaBatidaDoDia() throws MomentoBatidaException {
         Momento momento = new Momento();
         momento.setDataHora("2020-11-20T18:00:00");
         momentoService.validarSalvar(momento);

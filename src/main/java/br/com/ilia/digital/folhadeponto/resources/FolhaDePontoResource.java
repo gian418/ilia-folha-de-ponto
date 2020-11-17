@@ -4,6 +4,7 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import br.com.ilia.digital.folhadeponto.services.MomentoService;
+import br.com.ilia.digital.folhadeponto.services.exceptions.MomentoBatidaException;
 import org.openapi.folhadeponto.server.api.V1Api;
 import org.openapi.folhadeponto.server.model.Alocacao;
 import org.openapi.folhadeponto.server.model.Momento;
