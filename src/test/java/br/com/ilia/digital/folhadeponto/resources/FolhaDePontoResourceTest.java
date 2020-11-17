@@ -32,7 +32,7 @@ public class FolhaDePontoResourceTest {
     @Test
     public void deveInserirUmaBatidaComSucesso() {
         Momento momento = new Momento();
-        momento.setDataHora("2020-11-24T08:00:00");
+        momento.setDataHora("2021-11-24T08:00:00");
 
         given()
                 .contentType(JSON)

@@ -25,12 +25,11 @@ public class MomentoServiceTest {
     @Test
     public void deveRetornarExceptionAoTentarInserirMaisQueQuatroRegistros() {
         Exception exception = assertThrows(MomentoBatidaException.class, () -> {
-            Momento momento = new Momento();
-            momento.setDataHora("2020-11-16T19:00:00");
+            Momento momento = novoMomento("2020-11-16T19:00:00");
             momentoService.validarSalvar(momento);
         });
 
-        String mensagemEsperada = "Momento inválido. Número máximo de 4 batidas atingido";
+        String mensagemEsperada = ERRO_MSG_NUMERO_MAX_MOMENTOS_BATIDAS_ATINGINDO.getMsg();
         String mensagemAtual = exception.getMessage();
 
         assertTrue(mensagemAtual.contains(mensagemEsperada));
@@ -39,8 +38,7 @@ public class MomentoServiceTest {
     @Test
     public void deveRetornarExceptionAoTentarInserirBatidaNoSabado() {
         Exception exception = assertThrows(MomentoBatidaException.class, () -> {
-            Momento momento = new Momento();
-            momento.setDataHora("2020-11-14T08:00:00");
+            Momento momento = novoMomento("2020-11-14T08:00:00");
             momentoService.validarSalvar(momento);
         });
 
@@ -53,8 +51,7 @@ public class MomentoServiceTest {
     @Test
     public void deveRetornarExceptionAoTentarInserirBatidaNoDomingo() {
         Exception exception = assertThrows(MomentoBatidaException.class, () -> {
-            Momento momento = new Momento();
-            momento.setDataHora("2020-11-15T08:00:00");
+            Momento momento = novoMomento("2020-11-15T08:00:00");
             momentoService.validarSalvar(momento);
         });
 
@@ -67,8 +64,7 @@ public class MomentoServiceTest {
     @Test
     public void deveRetornarExceptionAoTentarInserirIntervalorMenorQue60Minutos() {
         Exception exception = assertThrows(MomentoBatidaException.class, () -> {
-            Momento momento = new Momento();
-            momento.setDataHora("2020-11-17T12:59:00");
+            Momento momento = novoMomento("2020-11-17T12:59:00");
             momentoService.validarSalvar(momento);
         });
 
@@ -81,8 +77,7 @@ public class MomentoServiceTest {
     @Test
     public void deveRetornarExceptionAoTentarInserirBatidaComHoraMenorQueUltima() {
         Exception exception = assertThrows(MomentoBatidaException.class, () -> {
-            Momento momento = new Momento();
-            momento.setDataHora("2020-11-17T10:00:00");
+            Momento momento = novoMomento("2020-11-17T10:00:00");
             momentoService.validarSalvar(momento);
         });
 
@@ -94,8 +89,7 @@ public class MomentoServiceTest {
 
     @Test
     public void deveInserirComoEntradaAPrimeiraBatidaDoDia() throws MomentoBatidaException {
-        Momento momento = new Momento();
-        momento.setDataHora("2020-11-18T08:00:00");
+        Momento momento = novoMomento("2020-11-18T08:00:00");
         momentoService.validarSalvar(momento);
 
         List<MomentoVO> momentos = momentoService.findAllByData(LocalDate.of(2020, 11, 18));
@@ -109,8 +103,7 @@ public class MomentoServiceTest {
 
     @Test
     public void deveInserirComoSaidaASegundaBatidaDoDia() throws MomentoBatidaException {
-        Momento momento = new Momento();
-        momento.setDataHora("2020-11-19T12:00:00");
+        Momento momento = novoMomento("2020-11-19T12:00:00");
         momentoService.validarSalvar(momento);
 
         List<MomentoVO> momentos = momentoService.findAllByData(LocalDate.of(2020, 11, 19));
@@ -126,8 +119,7 @@ public class MomentoServiceTest {
 
     @Test
     public void deveInserirComoEntradaATerceiraBatidaDoDia() throws MomentoBatidaException {
-        Momento momento = new Momento();
-        momento.setDataHora("2020-11-23T13:00:00");
+        Momento momento = novoMomento("2020-11-23T13:00:00");
         momentoService.validarSalvar(momento);
 
         List<MomentoVO> momentos = momentoService.findAllByData(LocalDate.of(2020,11, 23));
@@ -143,8 +135,7 @@ public class MomentoServiceTest {
 
     @Test
     public void deveInserirComoSaidaAQuartaBatidaDoDia() throws MomentoBatidaException {
-        Momento momento = new Momento();
-        momento.setDataHora("2020-11-20T18:00:00");
+        Momento momento = novoMomento("2020-11-20T18:00:00");
         momentoService.validarSalvar(momento);
 
         List<MomentoVO> momentos = momentoService.findAllByData(LocalDate.of(2020,11, 20));
@@ -156,5 +147,11 @@ public class MomentoServiceTest {
 
         assertTrue(quantidadeEsparada.equals(quantidadeRegistros));
         assertTrue(tipoRegistrado.equals(TipoMomento.SAIDA));
+    }
+
+    private Momento novoMomento(String datahora) {
+        Momento momento = new Momento();
+        momento.setDataHora(datahora);
+        return momento;
     }
 }

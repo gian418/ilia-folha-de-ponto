@@ -1,13 +1,11 @@
 package br.com.ilia.digital.folhadeponto.repository;
 
 import br.com.ilia.digital.folhadeponto.models.MomentoVO;
-import org.openapi.folhadeponto.server.model.Momento;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface MomentoRepository extends CrudRepository<MomentoVO, Integer> {

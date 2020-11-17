@@ -3,8 +3,8 @@ package br.com.ilia.digital.folhadeponto.resources;
 import java.util.Optional;
 import javax.validation.Valid;
 
+import br.com.ilia.digital.folhadeponto.services.AlocacaoService;
 import br.com.ilia.digital.folhadeponto.services.MomentoService;
-import br.com.ilia.digital.folhadeponto.services.exceptions.MomentoBatidaException;
 import org.openapi.folhadeponto.server.api.V1Api;
 import org.openapi.folhadeponto.server.model.Alocacao;
 import org.openapi.folhadeponto.server.model.Momento;
@@ -21,6 +21,9 @@ public class FolhaDePontoResource implements V1Api {
     @Autowired
     private MomentoService momentoService;
 
+    @Autowired
+    private AlocacaoService alocacaoService;
+
     @Override
     public Optional<NativeWebRequest> getRequest() {
         return Optional.empty();
@@ -33,7 +36,8 @@ public class FolhaDePontoResource implements V1Api {
 
     @Override
     public ResponseEntity<Alocacao> insereAlocacao(@Valid Alocacao alocacao) {
-        return null;
+        alocacaoService.validarSalvar(alocacao);
+        return ResponseEntity.ok().body(alocacao);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package br.com.ilia.digital.folhadeponto.resources.exceptions;
 
+import br.com.ilia.digital.folhadeponto.services.exceptions.AlocacaoException;
 import br.com.ilia.digital.folhadeponto.services.exceptions.MomentoBatidaException;
 import io.swagger.models.Response;
 import org.openapi.folhadeponto.server.model.Momento;
@@ -15,6 +16,15 @@ public class ResourceExcpetionHandler {
 
     @ExceptionHandler(MomentoBatidaException.class)
     public ResponseEntity<StandardError> momentoBatidaInvalida(MomentoBatidaException e, HttpServletRequest request) {
+       return construirResposta(e, request);
+    }
+
+    @ExceptionHandler(AlocacaoException.class)
+    public ResponseEntity<StandardError> alocacaoInvalida(AlocacaoException e, HttpServletRequest request) {
+        return construirResposta(e, request);
+    }
+
+    private ResponseEntity<StandardError> construirResposta(RuntimeException e, HttpServletRequest request) {
         StandardError err = new StandardError(
                 HttpStatus.BAD_REQUEST.value(),
                 e.getMessage(),
