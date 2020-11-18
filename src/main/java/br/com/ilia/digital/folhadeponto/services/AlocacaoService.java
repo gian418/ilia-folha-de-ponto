@@ -55,7 +55,7 @@ public class AlocacaoService {
         return repository.findAllByDia(dia);
     }
 
-    private Duration obterDuracaoTotalLancada(LocalDate data) {
+    public Duration obterDuracaoTotalLancada(LocalDate data) {
         List<MomentoVO> momentos = momentoService.findAllByData(data);
 
         if (momentos.size() < 4) {

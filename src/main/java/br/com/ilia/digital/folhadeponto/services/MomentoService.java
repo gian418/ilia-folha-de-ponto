@@ -86,7 +86,7 @@ public class MomentoService {
         return dateTime;
     }
 
-    private Registro construirRegistro(LocalDate dataBatida) {
+    public Registro construirRegistro(LocalDate dataBatida) {
         List<MomentoVO> momentos = repository.findAllByDate(dataBatida);
 
         List<String> horasRegistro =  momentos.stream().map(MomentoVO::getDataHora).map(dataHora -> {
